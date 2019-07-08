@@ -31,6 +31,15 @@ pub fn get_item(id: usize) -> JsonValue {
 
 }
 
+#[get("/db/all")]
+pub fn get_all_items() -> JsonValue {
+  let objects = super::store::Item::read_items();
+
+  print!("vector of items is: {:?}", objects);
+
+  json!(objects)
+}
+
 #[put("/db",format = "application/json", data="<item>")]
 pub fn add_new_item(item: Json<Item>) -> JsonValue {
   
@@ -38,6 +47,18 @@ pub fn add_new_item(item: Json<Item>) -> JsonValue {
   
   let _status = super::store::Item::add_item((item).id.clone(), (item).item.clone());
 
+  print!("Status is: {:?}", _status);
+
+  json!({"status" : "200 OK"})
+}
+
+#[post("/db", format = "application/json", data="<item>")]
+pub fn modify_item(item: Json<Item>) -> JsonValue {
+
+  print!("{:?}", item);
+
+  let _status = super::store::Item::modify_item((item).id.clone(), (item).item.clone());
+  
   print!("Status is: {:?}", _status);
 
   json!({"status" : "200 OK"})

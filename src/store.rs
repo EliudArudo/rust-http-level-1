@@ -6,8 +6,7 @@ use std::sync::Mutex;
 
 lazy_static! {
     static ref HASHMAP: Mutex<HashMap<&'static str, &'static str>> = {
-        let mut m = HashMap::new();
-        m.insert("10", "foo");
+        let m = HashMap::new();
         Mutex::new(m)
     };
 }
@@ -47,9 +46,33 @@ impl Item {
             _ => None,
         }
     }
+    
+    pub fn read_items() -> Vec<ItemObject> {
+        let map = HASHMAP.lock().unwrap();
 
-    // fn readItem(&self, id: u8) -> Option<Item>;
-    // fn readItems(&self) -> Option<Item>;
+        let mut output = vec![];
+        for (k, v) in map.iter() {
+            output.push(ItemObject {id: k.to_string(), item: v.to_string()});
+        }
+
+        output
+    }
+
+    pub fn modify_item(id: String, item: String) -> Option<bool> {
+        let mut map = HASHMAP.lock().unwrap();
+
+        let _id = string_to_static_str(id);
+        let _item = string_to_static_str(item);
+
+        match map.get(_id) {
+            Some(_) => {
+                *map.get_mut(_id).unwrap() = _item;
+                Some(true)
+            },
+            _ => None,
+        }
+    }
+    
     // fn modifyItem(&self, id: u8, item: String) -> Option<bool>;
     // fn removeItem(&self, id: u8) -> Option<bool>;
     // fn removeEverything(&self);

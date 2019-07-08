@@ -9,6 +9,16 @@ mod store;
 mod routes;
 
 fn main() {
-    rocket::ignite().mount("/", routes![routes::index, routes::get_json, routes::add_new_item, routes::get_item]).launch();
+    rocket::ignite().mount("/",
+                           routes![
+                              routes::index, 
+                              routes::get_json, 
+                              routes::add_new_item, 
+                              routes::get_item, 
+                              routes::get_all_items,
+                              routes::modify_item  
+                              ]
+                          )
+                          .launch();
 }
 
