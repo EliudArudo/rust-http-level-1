@@ -1,5 +1,6 @@
 use rocket_contrib::json::{Json,JsonValue};
 use serde_derive::{Serialize, Deserialize};
+use rocket::response::status;
 
 use super::store;
 
@@ -26,9 +27,15 @@ pub fn get_item(id: usize) -> JsonValue {
   let object = super::store::Item::read_item(id.to_string());
 
   print!("id is: {:?}, object is: {:?}", id, object);
-  // Return json!
-  json!(object)
-
+  
+  match object {
+    Some(_) => json!(object),
+    _ => { 
+      status::BadRequest(Some(json!({ "status" : "400" })));
+      json!({ "message" : "Bad Request" })
+    }
+  }
+  
 }
 
 #[get("/db/all")]
@@ -61,7 +68,13 @@ pub fn modify_item(item: Json<Item>) -> JsonValue {
   
   print!("Status is: {:?}", _status);
 
-  json!({"status" : "200 OK"})
+  match _status {
+    Some(_) => json!({"status" : "200 OK", "id" : item.id}),
+    _ => {
+      status::BadRequest(Some(json!({ "status" : "400" })));
+      json!({ "message" : "Bad Request" })
+    }
+  }
 }
 
 
