@@ -73,8 +73,26 @@ impl Item {
         }
     }
     
-    // fn modifyItem(&self, id: u8, item: String) -> Option<bool>;
     // fn removeItem(&self, id: u8) -> Option<bool>;
+    pub fn remove_item(id: String) -> Option<bool> {
+        let mut map = HASHMAP.lock().unwrap();
+
+        let _id = string_to_static_str(id);
+
+        match map.get(_id) {
+            Some(_) => {
+                map.remove(_id);
+                Some(true)
+            },
+            _ => None,
+        }
+    }
     // fn removeEverything(&self);
+    pub fn remove_everything() -> Option<bool> {
+        let mut map = HASHMAP.lock().unwrap();
+
+        map.clear();
+        Some(map.is_empty())
+    }
 
 }

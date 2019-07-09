@@ -16,7 +16,9 @@ fn main() {
                               routes::add_new_item, 
                               routes::get_item, 
                               routes::get_all_items,
-                              routes::modify_item  
+                              routes::modify_item  ,
+                              routes::delete_item,
+                              routes::delete_all_items
                               ]
                           )
                           .launch();
